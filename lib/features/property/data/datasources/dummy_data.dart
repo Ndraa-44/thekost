@@ -22,7 +22,7 @@ class DummyData {
     // ── Kost ──
     Property(
       id: '1',
-      name: 'D\'Kost Exclusive Jakal',
+      name: 'thekost Exclusive Jakal',
       location: 'Sleman',
       price: 'Rp 1.200.000/bln',
       imageUrl:

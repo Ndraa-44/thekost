@@ -116,98 +116,82 @@ class _ProfileContent extends StatelessWidget {
   }
 
   Widget _buildProfileHeader(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(24, 60, 24, 32),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            AppColors.primary,
-            AppColors.primary.withOpacity(0.85),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+    return Stack(
+      alignment: Alignment.topCenter,
+      children: [
+        // Blue background
+        Container(
+          width: double.infinity,
+          height: 220,
+          decoration: const BoxDecoration(
+            color: AppColors.primary,
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(32),
+              bottomRight: Radius.circular(32),
+            ),
+          ),
         ),
-        borderRadius: const BorderRadius.only(
-          bottomLeft: Radius.circular(32),
-          bottomRight: Radius.circular(32),
-        ),
-      ),
-      child: SafeArea(
-        bottom: false,
-        child: Column(
-          children: [
-            // Avatar
-            Container(
-              padding: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border:
-                    Border.all(color: Colors.white.withOpacity(0.5), width: 3),
+        // White Card
+        Container(
+          width: double.infinity,
+          margin: const EdgeInsets.only(top: 150, left: 24, right: 24),
+          padding: const EdgeInsets.only(top: 56, bottom: 24, left: 24, right: 24),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
               ),
-              child: const CircleAvatar(
-                radius: 44,
-                backgroundImage: NetworkImage(
-                  'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200',
+            ],
+          ),
+          child: Column(
+            children: [
+              Text(
+                user.name,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimary,
                 ),
               ),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              user.name,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
+              const SizedBox(height: 6),
+              Text(
+                user.email,
+                style: const TextStyle(
+                  fontSize: 13,
+                  color: AppColors.textSecondary,
+                ),
               ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              user.email,
-              style: TextStyle(
-                color: Colors.white.withOpacity(0.75),
-                fontSize: 14,
+              const SizedBox(height: 4),
+              Text(
+                user.phoneNumber ?? '-',
+                style: const TextStyle(
+                  fontSize: 13,
+                  color: AppColors.textSecondary,
+                ),
               ),
-            ),
-            const SizedBox(height: 16),
-            // Stats row
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.15),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _buildStat('2', 'Pesanan'),
-                  Container(
-                      width: 1, height: 30, color: Colors.white.withOpacity(0.3)),
-                  _buildStat('3', 'Favorit'),
-                  Container(
-                      width: 1, height: 30, color: Colors.white.withOpacity(0.3)),
-                  _buildStat('4.8', 'Rating'),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildStat(String value, String label) {
-    return Column(
-      children: [
-        Text(value,
-            style: const TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.bold)),
-        const SizedBox(height: 2),
-        Text(label,
-            style: TextStyle(
-                color: Colors.white.withOpacity(0.7), fontSize: 12)),
+        // Avatar positioned overlapping
+        Positioned(
+          top: 106,
+          child: Container(
+            padding: const EdgeInsets.all(4),
+            decoration: const BoxDecoration(
+              color: AppColors.background,
+              shape: BoxShape.circle,
+            ),
+            child: const CircleAvatar(
+              radius: 40,
+              backgroundColor: Color(0xFFE2E8F0),
+              child: Icon(Icons.person_outline, size: 40, color: Color(0xFF64748B)),
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -217,12 +201,30 @@ class _ProfileContent extends StatelessWidget {
       title: 'Akun',
       items: [
         _MenuItem(
+          icon: Icons.person_add_alt_1,
+          label: 'Mulai Menyewakan',
+          subtitle: 'Daftar Sebagai Pemilik Kos',
+          onTap: () => _showComingSoon(context, 'Mulai Menyewakan'),
+        ),
+        _MenuItem(
+          icon: Icons.receipt_long,
+          label: 'Pesanan Saya',
+          onTap: () => _showComingSoon(context, 'Pesanan Saya'),
+        ),
+        _MenuItem(
+          icon: Icons.admin_panel_settings_outlined,
+          label: 'Verifikasi Akun',
+          subtitle: 'Akun belum diverifikasi',
+          hasWarning: true,
+          onTap: () => _showComingSoon(context, 'Verifikasi Akun'),
+        ),
+        _MenuItem(
           icon: Icons.person_outline_rounded,
           label: 'Edit Profil',
           onTap: () => _showComingSoon(context, 'Edit Profil'),
         ),
         _MenuItem(
-          icon: Icons.payment_rounded,
+          icon: Icons.lock_outline_rounded,
           label: 'Metode Pembayaran',
           onTap: () => _showComingSoon(context, 'Metode Pembayaran'),
         ),
@@ -253,12 +255,6 @@ class _ProfileContent extends StatelessWidget {
           icon: Icons.shield_outlined,
           label: 'Kebijakan Privasi',
           onTap: () => _showComingSoon(context, 'Kebijakan Privasi'),
-        ),
-        _MenuItem(
-          icon: Icons.info_outline_rounded,
-          label: 'Tentang Aplikasi',
-          subtitle: 'Versi 1.0.0',
-          onTap: () => _showComingSoon(context, 'Tentang Aplikasi'),
         ),
       ],
     );
@@ -310,9 +306,21 @@ class _ProfileContent extends StatelessWidget {
                         child: Icon(item.icon,
                             color: AppColors.primary, size: 20),
                       ),
-                      title: Text(item.label,
+                      title: RichText(
+                        text: TextSpan(
+                          text: item.label,
                           style: const TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.w500)),
+                              fontSize: 15, fontWeight: FontWeight.w500, color: AppColors.textPrimary),
+                          children: [
+                            if (item.hasWarning)
+                              const TextSpan(
+                                  text: ' *',
+                                  style: TextStyle(
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.bold)),
+                          ],
+                        ),
+                      ),
                       subtitle: item.subtitle != null
                           ? Text(item.subtitle!,
                               style: TextStyle(
@@ -343,17 +351,22 @@ class _ProfileContent extends StatelessWidget {
       child: SizedBox(
         width: double.infinity,
         height: 50,
-        child: OutlinedButton.icon(
+        child: OutlinedButton(
           onPressed: () => _showLogoutDialog(context),
-          icon: const Icon(Icons.logout_rounded),
-          label: const Text('Keluar dari Akun',
-              style: TextStyle(fontWeight: FontWeight.w600)),
           style: OutlinedButton.styleFrom(
-            foregroundColor: Colors.red.shade600,
-            side: BorderSide(color: Colors.red.shade300),
+            side: const BorderSide(color: Colors.red, width: 1.5),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(14),
             ),
+          ),
+          child: const Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.logout_rounded, color: Colors.red, size: 20),
+              SizedBox(width: 8),
+              Text('Keluar dari Akun',
+                  style: TextStyle(fontWeight: FontWeight.w600, color: Colors.red)),
+            ],
           ),
         ),
       ),
@@ -408,11 +421,13 @@ class _MenuItem {
   final String label;
   final String? subtitle;
   final VoidCallback onTap;
+  final bool hasWarning;
 
   _MenuItem({
     required this.icon,
     required this.label,
     this.subtitle,
     required this.onTap,
+    this.hasWarning = false,
   });
 }

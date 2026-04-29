@@ -11,7 +11,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await Future.delayed(const Duration(seconds: 2));
       
       if (event.email == 'admin@dkost.com' && event.password == 'admin123') {
-        emit(AuthAuthenticated(User(id: '1', name: 'Admin User', email: event.email)));
+        emit(AuthAuthenticated(User(
+          id: '1',
+          name: 'Ahmad Sobirin',
+          email: 'ahmadsobirin@gmail.com',
+          phoneNumber: '0895400976472',
+        )));
       } else {
         emit(AuthError('Email atau password salah. (Gunakan admin@dkost.com / admin123)'));
       }

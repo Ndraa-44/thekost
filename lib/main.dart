@@ -6,11 +6,11 @@ import 'features/property/presentation/bloc/property_bloc.dart';
 import 'features/splash/presentation/pages/splash_screen.dart';
 
 void main() {
-  runApp(const DKostApp());
+  runApp(const TheKostApp());
 }
 
-class DKostApp extends StatelessWidget {
-  const DKostApp({super.key});
+class TheKostApp extends StatelessWidget {
+  const TheKostApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class DKostApp extends StatelessWidget {
         BlocProvider<PropertyBloc>(create: (context) => PropertyBloc()),
       ],
       child: MaterialApp(
-        title: 'D\'Kost App',
+        title: 'thekost',
         debugShowCheckedModeBanner: false,
         theme: AppTheme.lightTheme,
         home: const SplashScreen(),

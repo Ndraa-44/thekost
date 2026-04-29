@@ -31,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
             const Icon(Icons.home_work_rounded, size: 80, color: Colors.white),
             const SizedBox(height: 16),
             const Text(
-              'D\'Kost',
+              'thekost.',
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.bold,
