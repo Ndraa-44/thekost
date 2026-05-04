@@ -13,10 +13,17 @@ class AppStrings {
   static const String appTagline = 'Temukan Kos Idamanmu';
 
   // ── Auth ──
-  static const String loginTitle = "Masuk ke D'Kost";
+  static const String loginTitle = "Masuk";
   static const String loginSubtitle =
       'Silakan masuk untuk memesan properti idaman Anda.';
   static const String loginButton = 'Masuk';
+  static const String registerTitle = "Daftar";
+  static const String registerButton = 'Daftar';
+  static const String googleLoginButton = 'Masuk Dengan Google';
+  static const String googleRegisterButton = 'Daftar Dengan Google';
+  static const String orDivider = 'Atau';
+  static const String noAccountText = 'Belum punya akun? ';
+  static const String hasAccountText = 'Sudah punya akun? ';
   static const String loginNow = 'Masuk Sekarang';
   static const String logoutTitle = 'Keluar';
   static const String logoutConfirm =
@@ -34,7 +41,8 @@ class AppStrings {
   static const String searchCategory = 'Kategori Pencarian';
   static const String searchPlaceholder = 'Temukan yang kamu cari';
   static const String locationTitle = 'Lokasi Kami di Yogyakarta';
-  static const String noPropertyInLocation = 'Belum ada properti di lokasi ini.';
+  static const String noPropertyInLocation =
+      'Belum ada properti di lokasi ini.';
 
   // ── Property Detail ──
   static const String facilities = 'Fasilitas';

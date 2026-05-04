@@ -23,3 +23,18 @@ class LoginRequested extends AuthEvent {
 class LogoutRequested extends AuthEvent {
   const LogoutRequested();
 }
+
+/// Triggered when the user submits registration details.
+class RegisterRequested extends AuthEvent {
+  final String email;
+
+  const RegisterRequested(this.email);
+
+  @override
+  List<Object?> get props => [email];
+}
+
+/// Triggered when the user requests Google Login.
+class GoogleAuthRequested extends AuthEvent {
+  const GoogleAuthRequested();
+}

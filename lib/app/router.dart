@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import '../features/home/presentation/pages/main_screen.dart';
 import '../features/splash/presentation/pages/splash_screen.dart';
 import '../features/auth/presentation/pages/login_page.dart';
+import '../features/auth/presentation/pages/register_page.dart';
 import '../features/property/domain/entities/property.dart';
 import '../features/property/presentation/pages/property_detail_page.dart';
 import '../features/property/presentation/pages/search_result_page.dart';
@@ -40,6 +41,7 @@ class AppRouter {
   static const String splashPath = '/';
   static const String homePath = '/home';
   static const String loginPath = '/login';
+  static const String registerPath = '/register';
   static const String propertyDetailPath = '/property-detail';
   static const String searchResultPath = '/search-result';
 
@@ -58,6 +60,10 @@ class AppRouter {
       GoRoute(
         path: loginPath,
         builder: (context, state) => const LoginPage(),
+      ),
+      GoRoute(
+        path: registerPath,
+        builder: (context, state) => const RegisterPage(),
       ),
       GoRoute(
         path: propertyDetailPath,

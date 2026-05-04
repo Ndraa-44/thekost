@@ -15,6 +15,16 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<User> register(String email) {
+    return _dataSource.register(email);
+  }
+
+  @override
+  Future<User> loginWithGoogle() {
+    return _dataSource.loginWithGoogle();
+  }
+
+  @override
   Future<void> logout() {
     return _dataSource.logout();
   }

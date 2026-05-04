@@ -8,6 +8,12 @@ abstract class AuthRepository {
   /// Returns [User] on success, throws on failure.
   Future<User> login(String email, String password);
 
+  /// Attempts to register with [email].
+  Future<User> register(String email);
+
+  /// Attempts to login with Google.
+  Future<User> loginWithGoogle();
+
   /// Logs out the current user.
   Future<void> logout();
 }

@@ -8,23 +8,20 @@ import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
 import '../bloc/auth_state.dart';
 
-/// Login page for user authentication.
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+/// Register page for new user registration.
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  bool _obscurePassword = true;
 
   @override
   void dispose() {
     _emailController.dispose();
-    _passwordController.dispose();
     super.dispose();
   }
 
@@ -76,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
                               
                               // Title
                               const Text(
-                                AppStrings.loginTitle,
+                                AppStrings.registerTitle,
                                 style: TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,
@@ -110,57 +107,16 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                 ),
                               ),
-                              const SizedBox(height: 16),
-
-                              // Password Field
-                              const Text(
-                                'Password',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14,
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              TextField(
-                                controller: _passwordController,
-                                obscureText: _obscurePassword,
-                                decoration: InputDecoration(
-                                  hintText: 'Masukkan password',
-                                  hintStyle: const TextStyle(color: Colors.black54),
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      horizontal: 16, vertical: 14),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                    borderSide: BorderSide.none,
-                                  ),
-                                  suffixIcon: IconButton(
-                                    icon: Icon(
-                                      _obscurePassword
-                                          ? Icons.visibility_off_outlined
-                                          : Icons.visibility_outlined,
-                                      color: Colors.black54,
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        _obscurePassword = !_obscurePassword;
-                                      });
-                                    },
-                                  ),
-                                ),
-                              ),
                               const SizedBox(height: 24),
 
-                              // Login Button
+                              // Register Button
                               ElevatedButton(
                                 onPressed: state is AuthLoading
                                     ? null
                                     : () {
                                         context.read<AuthBloc>().add(
-                                              LoginRequested(
+                                              RegisterRequested(
                                                 _emailController.text,
-                                                _passwordController.text,
                                               ),
                                             );
                                       },
@@ -182,7 +138,7 @@ class _LoginPageState extends State<LoginPage> {
                                         ),
                                       )
                                     : const Text(
-                                        AppStrings.loginButton,
+                                        AppStrings.registerButton,
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
@@ -249,7 +205,7 @@ class _LoginPageState extends State<LoginPage> {
                                     ),
                                     const SizedBox(width: 8),
                                     const Text(
-                                      AppStrings.googleLoginButton,
+                                      AppStrings.googleRegisterButton,
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold,
@@ -262,18 +218,18 @@ class _LoginPageState extends State<LoginPage> {
                               // Spacer to push footer
                               const SizedBox(height: 48),
 
-                              // Register Link
+                              // Login Link
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   const Text(
-                                    AppStrings.noAccountText,
+                                    AppStrings.hasAccountText,
                                     style: TextStyle(fontSize: 12, color: Colors.black87),
                                   ),
                                   GestureDetector(
-                                    onTap: () => context.push(AppRouter.registerPath),
+                                    onTap: () => context.pop(), // Go back to Login
                                     child: const Text(
-                                      AppStrings.registerTitle,
+                                      AppStrings.loginTitle,
                                       style: TextStyle(
                                         fontSize: 14,
                                         color: Color(0xFF0D47A1),
