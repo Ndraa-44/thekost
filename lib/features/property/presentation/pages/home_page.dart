@@ -102,7 +102,10 @@ class _HomePageState extends State<HomePage> {
   Widget _buildHeader() {
     return Container(
       padding: const EdgeInsets.fromLTRB(
-        AppSpacing.lg, 28, AppSpacing.lg, AppSpacing.xl,
+        AppSpacing.lg,
+        28,
+        AppSpacing.lg,
+        AppSpacing.xl,
       ),
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -219,17 +222,22 @@ class _HomePageState extends State<HomePage> {
                   color: AppColors.textPrimary,
                 ),
                 items: PropertyLocalDataSource.jogjaLocations
-                    .map((loc) => DropdownMenuItem(
-                          value: loc,
-                          child: Row(
-                            children: [
-                              const Icon(Icons.location_on_outlined,
-                                  color: AppColors.textSecondary, size: 18),
-                              const SizedBox(width: 10),
-                              Text(loc),
-                            ],
-                          ),
-                        ))
+                    .map(
+                      (loc) => DropdownMenuItem(
+                        value: loc,
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.location_on_outlined,
+                              color: AppColors.textSecondary,
+                              size: 18,
+                            ),
+                            const SizedBox(width: 10),
+                            Text(loc),
+                          ],
+                        ),
+                      ),
+                    )
                     .toList(),
                 onChanged: (val) {
                   if (val != null) setState(() => _selectedLocation = val);
@@ -296,14 +304,19 @@ class _HomePageState extends State<HomePage> {
               ),
               child: Row(
                 children: [
-                  Icon(Icons.search_rounded,
-                      color: Colors.grey.shade400, size: 20),
+                  Icon(
+                    Icons.search_rounded,
+                    color: Colors.grey.shade400,
+                    size: 20,
+                  ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
                       AppStrings.searchPlaceholder,
-                      style:
-                          TextStyle(color: Colors.grey.shade500, fontSize: 13),
+                      style: TextStyle(
+                        color: Colors.grey.shade500,
+                        fontSize: 13,
+                      ),
                     ),
                   ),
                 ],
@@ -363,10 +376,7 @@ class _HomePageState extends State<HomePage> {
   void _navigateToSearchResult() {
     context.push(
       AppRouter.searchResultPath,
-      extra: {
-        'location': _selectedLocation,
-        'category': _selectedCategory,
-      },
+      extra: {'location': _selectedLocation, 'category': _selectedCategory},
     );
   }
 
@@ -398,8 +408,7 @@ class _HomePageState extends State<HomePage> {
                   loc,
                   style: TextStyle(
                     color: isSelected ? Colors.white : Colors.black87,
-                    fontWeight:
-                        isSelected ? FontWeight.bold : FontWeight.w600,
+                    fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
                     fontSize: 13,
                   ),
                 ),
@@ -423,8 +432,7 @@ class _HomePageState extends State<HomePage> {
         if (state is PropertyLoaded) {
           final filteredProps = state.properties.where((p) {
             return p.category == _selectedCategory &&
-                p.location.toLowerCase() ==
-                    _selectedSubLocation.toLowerCase();
+                p.location.toLowerCase() == _selectedSubLocation.toLowerCase();
           }).toList();
 
           return Column(
@@ -447,9 +455,7 @@ class _HomePageState extends State<HomePage> {
               SizedBox(
                 height: 250,
                 child: filteredProps.isEmpty
-                    ? const Center(
-                        child: Text(AppStrings.noPropertyInLocation),
-                      )
+                    ? const Center(child: Text(AppStrings.noPropertyInLocation))
                     : ListView.separated(
                         padding: AppSpacing.paddingHorizontal,
                         scrollDirection: Axis.horizontal,
@@ -487,10 +493,7 @@ class _PropertyCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => context.push(
-        AppRouter.propertyDetailPath,
-        extra: property,
-      ),
+      onTap: () => context.push(AppRouter.propertyDetailPath, extra: property),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(AppSpacing.radiusXl),
@@ -539,21 +542,30 @@ class _PropertyCard extends StatelessWidget {
                           color: Colors.white,
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(Icons.favorite,
-                            color: Colors.red, size: 14),
+                        child: const Icon(
+                          Icons.favorite,
+                          color: Colors.red,
+                          size: 14,
+                        ),
                       ),
                       Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 4),
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius:
-                              BorderRadius.circular(AppSpacing.radiusMd),
+                          borderRadius: BorderRadius.circular(
+                            AppSpacing.radiusMd,
+                          ),
                         ),
                         child: Row(
                           children: [
-                            const Icon(Icons.star_rounded,
-                                color: Colors.amber, size: 14),
+                            const Icon(
+                              Icons.star_rounded,
+                              color: Colors.amber,
+                              size: 14,
+                            ),
                             const SizedBox(width: 4),
                             Text(
                               property.rating.toString(),
