@@ -4,36 +4,16 @@ import '../features/home/presentation/pages/main_screen.dart';
 import '../features/splash/presentation/pages/splash_screen.dart';
 import '../features/auth/presentation/pages/login_page.dart';
 import '../features/auth/presentation/pages/register_page.dart';
+import '../features/auth/domain/entities/user.dart';
 import '../features/property/domain/entities/property.dart';
 import '../features/property/presentation/pages/property_detail_page.dart';
 import '../features/property/presentation/pages/search_result_page.dart';
+import '../features/profile/presentation/pages/verify_account_page.dart';
+import '../features/profile/presentation/pages/edit_profile_page.dart';
+import '../features/profile/presentation/pages/privacy_policy_page.dart';
+import '../features/profile/presentation/pages/help_center_page.dart';
+import '../features/profile/presentation/pages/terms_conditions_page.dart';
 
-/// Centralized routing configuration using GoRouter.
-///
-/// ### How GoRouter Works (Penjelasan untuk pemula):
-///
-/// GoRouter adalah package routing resmi yang direkomendasikan oleh tim Flutter.
-/// Berbeda dengan `Navigator.push()` yang imperatif, GoRouter menggunakan
-/// pendekatan **deklaratif** — Anda mendefinisikan semua routes di satu tempat,
-/// lalu navigasi menggunakan path string (mirip URL di web).
-///
-/// **Keuntungan:**
-/// 1. Semua routes terdefinisi di satu file — mudah di-maintain
-/// 2. Mendukung deep linking (buka halaman tertentu dari link)
-/// 3. Type-safe navigation dengan `context.go()` atau `context.push()`
-/// 4. Mudah menambah route baru tanpa mengubah file lain
-///
-/// **Cara navigasi:**
-/// ```dart
-/// // Push ke halaman baru (bisa back)
-/// context.push(AppRouter.loginPath);
-///
-/// // Replace halaman (tidak bisa back)
-/// context.go(AppRouter.homePath);
-///
-/// // Push dengan data (extra)
-/// context.push(AppRouter.propertyDetailPath, extra: property);
-/// ```
 class AppRouter {
   AppRouter._(); // Prevent instantiation
 
@@ -44,6 +24,13 @@ class AppRouter {
   static const String registerPath = '/register';
   static const String propertyDetailPath = '/property-detail';
   static const String searchResultPath = '/search-result';
+
+  // ── Profile Detail Paths ──
+  static const String verifyAccountPath = '/verify-account';
+  static const String editProfilePath = '/edit-profile';
+  static const String privacyPolicyPath = '/privacy-policy';
+  static const String helpCenterPath = '/help-center';
+  static const String termsConditionsPath = '/terms-conditions';
 
   /// The GoRouter instance used by [MaterialApp.router].
   static final GoRouter router = GoRouter(
@@ -81,6 +68,31 @@ class AppRouter {
             category: params['category']!,
           );
         },
+      ),
+
+      // ── Profile Detail Routes ──
+      GoRoute(
+        path: verifyAccountPath,
+        builder: (context, state) => const VerifyAccountPage(),
+      ),
+      GoRoute(
+        path: editProfilePath,
+        builder: (context, state) {
+          final user = state.extra as User;
+          return EditProfilePage(user: user);
+        },
+      ),
+      GoRoute(
+        path: privacyPolicyPath,
+        builder: (context, state) => const PrivacyPolicyPage(),
+      ),
+      GoRoute(
+        path: helpCenterPath,
+        builder: (context, state) => const HelpCenterPage(),
+      ),
+      GoRoute(
+        path: termsConditionsPath,
+        builder: (context, state) => const TermsConditionsPage(),
       ),
     ],
   );

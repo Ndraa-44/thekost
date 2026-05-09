@@ -112,6 +112,9 @@ class AppStrings {
   static String noResultFound(String category, String location) =>
       'Tidak ada $category ditemukan\ndi $location';
   static const String changeSearch = 'Ubah Pencarian';
+  static const String selectLocation = 'Pilih Lokasi';
+  static const String noLocationFound = 'Tidak ada lokasi ditemukan';
+  static const String selectLocationFirst = 'Pilih lokasi terlebih dahulu';
 
   // ── Navigation ──
   static const String navDiscover = 'Discover';

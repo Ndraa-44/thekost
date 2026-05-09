@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../app/router.dart';
@@ -30,10 +31,25 @@ class _Review {
 }
 
 /// Detail page for a single property listing (Kost, Homestay, or Villa).
-class PropertyDetailPage extends StatelessWidget {
+class PropertyDetailPage extends StatefulWidget {
   final Property property;
 
   const PropertyDetailPage({super.key, required this.property});
+
+  @override
+  State<PropertyDetailPage> createState() => _PropertyDetailPageState();
+}
+
+class _PropertyDetailPageState extends State<PropertyDetailPage> {
+  final ValueNotifier<bool> _isBottomBarVisible = ValueNotifier<bool>(true);
+
+  Property get property => widget.property;
+
+  @override
+  void dispose() {
+    _isBottomBarVisible.dispose();
+    super.dispose();
+  }
 
   // --- Dummy Data Definitions ---
   static const List<String> _dummyGallery = [
@@ -71,9 +87,28 @@ class PropertyDetailPage extends StatelessWidget {
       body: Stack(
         children: [
           // 1. Scrolling Content (Back layer)
-          SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          NotificationListener<ScrollNotification>(
+            onNotification: (notification) {
+              if (notification.metrics.extentAfter <= 0) {
+                if (!_isBottomBarVisible.value) {
+                  _isBottomBarVisible.value = true;
+                }
+              } else if (notification is UserScrollNotification) {
+                if (notification.direction == ScrollDirection.forward) {
+                  if (!_isBottomBarVisible.value) {
+                    _isBottomBarVisible.value = true;
+                  }
+                } else if (notification.direction == ScrollDirection.reverse) {
+                  if (_isBottomBarVisible.value) {
+                    _isBottomBarVisible.value = false;
+                  }
+                }
+              }
+              return false;
+            },
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 380), // Padding to start below the static header
                 Container(
@@ -100,6 +135,7 @@ class PropertyDetailPage extends StatelessWidget {
                 ),
               ],
             ),
+          ),
           ),
           
           // 2. Fixed Header (Image + Title Card) (Front layer)
@@ -157,7 +193,18 @@ class PropertyDetailPage extends StatelessWidget {
             left: 0,
             right: 0,
             bottom: 0,
-            child: _buildBottomBar(context),
+            child: ValueListenableBuilder<bool>(
+              valueListenable: _isBottomBarVisible,
+              builder: (context, isVisible, child) {
+                return AnimatedSlide(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                  offset: isVisible ? Offset.zero : const Offset(0, 1.2), // 1.2 to hide completely including shadow
+                  child: child,
+                );
+              },
+              child: _buildBottomBar(context),
+            ),
           ),
         ],
       ),

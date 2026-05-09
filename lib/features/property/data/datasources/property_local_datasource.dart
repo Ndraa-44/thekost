@@ -20,8 +20,10 @@ class PropertyLocalDataSource {
   /// Property categories.
   static const List<Category> categories = [
     Category(id: '1', name: 'Kost', iconName: 'kost'),
-    Category(id: '2', name: 'Villa', iconName: 'villa'),
-    Category(id: '3', name: 'Homestay', iconName: 'homestay'),
+    Category(id: '2', name: 'Homestay', iconName: 'homestay'),
+    Category(id: '3', name: 'Rented House', iconName: 'rented_house'),
+    Category(id: '4', name: 'Villa', iconName: 'villa'),
+    Category(id: '5', name: 'Rented Apartement', iconName: 'rented_apartment'),
   ];
 
   /// All available property listings.

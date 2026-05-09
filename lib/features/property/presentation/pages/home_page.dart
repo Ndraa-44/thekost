@@ -6,11 +6,14 @@ import '../../../../app/router.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/constants/app_spacing.dart';
+import '../../../../core/widgets/searchable_dropdown.dart';
 import '../../data/datasources/property_local_datasource.dart';
 import '../../domain/entities/property.dart';
 import '../bloc/property_bloc.dart';
 import '../bloc/property_event.dart';
 import '../bloc/property_state.dart';
+import '../../../../features/auth/presentation/bloc/auth_bloc.dart';
+import '../../../../features/auth/presentation/bloc/auth_state.dart';
 
 /// Home / Discover page — the main landing screen.
 ///
@@ -27,7 +30,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String _selectedLocation = PropertyLocalDataSource.jogjaLocations.first;
+  String? _selectedLocation;
   String _selectedCategory = PropertyLocalDataSource.categories.first.name;
   String _selectedSubLocation = PropertyLocalDataSource.jogjaLocations.first;
 
@@ -38,8 +41,10 @@ class _HomePageState extends State<HomePage> {
   /// Maps category icon names to [IconData] for rendering.
   static const Map<String, IconData> _categoryIcons = {
     'kost': Icons.apartment,
-    'villa': Icons.villa,
     'homestay': Icons.cottage,
+    'rented_house': Icons.house,
+    'villa': Icons.villa,
+    'rented_apartment': Icons.domain,
   };
 
   @override
@@ -121,77 +126,108 @@ class _HomePageState extends State<HomePage> {
           bottomRight: Radius.circular(AppSpacing.radiusXxl),
         ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+      child: BlocBuilder<AuthBloc, AuthState>(
+        builder: (context, authState) {
+          final String userName = (authState is AuthAuthenticated)
+              ? authState.user.name
+              : 'Guest'; // Fallback
+          return Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              // Avatar & Greetings
+              Row(
                 children: [
-                  Text(
-                    AppStrings.welcomeGreeting,
-                    style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.8),
-                      fontSize: 14,
+                  Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.4),
+                        width: 2,
+                      ),
+                    ),
+                    child: const CircleAvatar(
+                      radius: 24,
+                      backgroundImage: NetworkImage(
+                        'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=100',
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 4),
-                  const Text(
-                    AppStrings.appHeaderTitle,
-                    style: TextStyle(
+                  const SizedBox(width: 14),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Good morning, $userName!',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Welcome to thekost',
+                        style: TextStyle(
+                          color: Colors.white.withValues(alpha: 0.8),
+                          fontSize: 13,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              // Notification Bell
+              Stack(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.3),
+                        width: 1,
+                      ),
+                      color: Colors.white.withValues(alpha: 0.1),
+                    ),
+                    child: const Icon(
+                      Icons.notifications_none_rounded,
                       color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 22,
+                      size: 24,
+                    ),
+                  ),
+                  Positioned(
+                    right: 4,
+                    top: 4,
+                    child: Container(
+                      width: 10,
+                      height: 10,
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: AppColors.primary,
+                          width: 2,
+                        ),
+                      ),
                     ),
                   ),
                 ],
               ),
-              Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.4),
-                    width: 2,
-                  ),
-                ),
-                child: const CircleAvatar(
-                  radius: 22,
-                  backgroundImage: NetworkImage(
-                    'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=100',
-                  ),
-                ),
-              ),
             ],
-          ),
-          const SizedBox(height: AppSpacing.xl - 4),
-          const Text(
-            AppStrings.heroTitle,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 26,
-              fontWeight: FontWeight.bold,
-              height: 1.3,
-            ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }
 
   // ─────────────── CONTAINER PENCARIAN ───────────────
   Widget _buildSearchContainer() {
-    return Container(
-      margin: AppSpacing.paddingHorizontal,
-      padding: const EdgeInsets.all(AppSpacing.xl - 4),
-      decoration: BoxDecoration(
-        color: AppColors.primaryLight.withValues(alpha: 0.8),
-        borderRadius: BorderRadius.circular(AppSpacing.radiusXl),
-      ),
+    return Padding(
+      padding: AppSpacing.paddingHorizontal,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // ── Title (moved to top) ──
           const Text(
             AppStrings.searchCategory,
             style: TextStyle(
@@ -201,127 +237,130 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           const SizedBox(height: AppSpacing.md),
-          // Location dropdown
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
-            ),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton<String>(
-                value: _selectedLocation,
-                isExpanded: true,
-                icon: const Icon(
-                  Icons.keyboard_arrow_down_rounded,
-                  color: AppColors.textSecondary,
-                ),
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.textPrimary,
-                ),
-                items: PropertyLocalDataSource.jogjaLocations
-                    .map(
-                      (loc) => DropdownMenuItem(
-                        value: loc,
-                        child: Row(
-                          children: [
-                            const Icon(
-                              Icons.location_on_outlined,
-                              color: AppColors.textSecondary,
-                              size: 18,
-                            ),
-                            const SizedBox(width: 10),
-                            Text(loc),
-                          ],
-                        ),
-                      ),
-                    )
-                    .toList(),
-                onChanged: (val) {
-                  if (val != null) setState(() => _selectedLocation = val);
-                },
-              ),
-            ),
-          ),
-          const SizedBox(height: AppSpacing.md),
-          // Category chips
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: PropertyLocalDataSource.categories.map((cat) {
-              final isSelected = _selectedCategory == cat.name;
-              final iconData = _categoryIcons[cat.iconName] ?? Icons.category;
-              return Expanded(
-                child: GestureDetector(
-                  onTap: () => setState(() => _selectedCategory = cat.name),
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 4),
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    decoration: BoxDecoration(
-                      color: isSelected ? Colors.white : Colors.transparent,
-                      borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          iconData,
-                          size: 16,
-                          color: isSelected
-                              ? AppColors.primary
-                              : Colors.black54,
-                        ),
-                        const SizedBox(width: 6),
-                        Text(
-                          cat.name,
-                          style: TextStyle(
-                            color: isSelected
-                                ? AppColors.primary
-                                : Colors.black54,
-                            fontWeight: isSelected
-                                ? FontWeight.bold
-                                : FontWeight.w500,
-                            fontSize: 13,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              );
-            }).toList(),
-          ),
-          const SizedBox(height: AppSpacing.md),
-          // Search bar
+          // ── Search bar ──
           GestureDetector(
             onTap: _navigateToSearchResult,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
+                borderRadius: BorderRadius.circular(AppSpacing.radiusXl),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.06),
+                    blurRadius: 12,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
               ),
               child: Row(
                 children: [
                   Icon(
                     Icons.search_rounded,
                     color: Colors.grey.shade400,
-                    size: 20,
+                    size: 22,
                   ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
                       AppStrings.searchPlaceholder,
                       style: TextStyle(
-                        color: Colors.grey.shade500,
-                        fontSize: 13,
+                        color: Colors.grey.shade400,
+                        fontSize: 14,
                       ),
                     ),
                   ),
                 ],
               ),
             ),
+          ),
+          const SizedBox(height: 20),
+          // ── Category icons ──
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: PropertyLocalDataSource.categories.map((cat) {
+              final isSelected = _selectedCategory == cat.name;
+              final iconData =
+                  _categoryIcons[cat.iconName] ?? Icons.category;
+              return GestureDetector(
+                onTap: () => setState(() => _selectedCategory = cat.name),
+                child: SizedBox(
+                  width: 64,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 250),
+                        curve: Curves.easeInOut,
+                        width: 52,
+                        height: 52,
+                        decoration: BoxDecoration(
+                          color: isSelected
+                              ? AppColors.primary
+                              : Colors.white,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: isSelected
+                                ? AppColors.primary
+                                : Colors.grey.shade300,
+                            width: 1.5,
+                          ),
+                          boxShadow: isSelected
+                              ? [
+                                  BoxShadow(
+                                    color: AppColors.primary
+                                        .withValues(alpha: 0.3),
+                                    blurRadius: 8,
+                                    offset: const Offset(0, 3),
+                                  ),
+                                ]
+                              : [],
+                        ),
+                        child: Icon(
+                          iconData,
+                          size: 24,
+                          color:
+                              isSelected ? Colors.white : Colors.grey.shade600,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      // Fixed-height label area so all icons align
+                      SizedBox(
+                        height: 28,
+                        child: Text(
+                          cat.name,
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 11,
+                            height: 1.2,
+                            fontWeight: isSelected
+                                ? FontWeight.bold
+                                : FontWeight.w500,
+                            color: isSelected
+                                ? AppColors.primary
+                                : Colors.grey.shade700,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+          const SizedBox(height: 20),
+          // ── Location dropdown (searchable) ──
+          SearchableDropdown<String>(
+            items: PropertyLocalDataSource.jogjaLocations,
+            labelBuilder: (loc) => loc,
+            selectedItem: _selectedLocation,
+            onChanged: (val) => setState(() => _selectedLocation = val),
+            onCleared: () => setState(() => _selectedLocation = null),
+            placeholder: AppStrings.selectLocation,
+            prefixIcon: Icons.location_on_outlined,
+            menuMaxHeight: 250,
           ),
         ],
       ),
@@ -374,9 +413,18 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _navigateToSearchResult() {
+    if (_selectedLocation == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(AppStrings.selectLocationFirst),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
     context.push(
       AppRouter.searchResultPath,
-      extra: {'location': _selectedLocation, 'category': _selectedCategory},
+      extra: {'location': _selectedLocation!, 'category': _selectedCategory},
     );
   }
 
@@ -399,7 +447,7 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
                 color: isSelected
-                    ? AppColors.accentPurple
+                    ? AppColors.primary
                     : Colors.grey.shade300,
                 borderRadius: BorderRadius.circular(10),
               ),

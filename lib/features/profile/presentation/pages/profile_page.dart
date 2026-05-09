@@ -176,12 +176,12 @@ class _ProfileContent extends StatelessWidget {
           label: AppStrings.verifyAccount,
           subtitle: AppStrings.verifyAccountSub,
           hasWarning: true,
-          onTap: () => _showComingSoon(context, AppStrings.verifyAccount),
+          onTap: () => context.push(AppRouter.verifyAccountPath),
         ),
         _MenuItem(
           icon: Icons.person_outline_rounded,
           label: AppStrings.editProfile,
-          onTap: () => _showComingSoon(context, AppStrings.editProfile),
+          onTap: () => context.push(AppRouter.editProfilePath, extra: user),
         ),
         _MenuItem(
           icon: Icons.lock_outline_rounded,
@@ -204,17 +204,17 @@ class _ProfileContent extends StatelessWidget {
         _MenuItem(
           icon: Icons.help_outline_rounded,
           label: AppStrings.helpCenter,
-          onTap: () => _showComingSoon(context, AppStrings.helpCenter),
+          onTap: () => context.push(AppRouter.helpCenterPath),
         ),
         _MenuItem(
           icon: Icons.description_outlined,
           label: AppStrings.termsConditions,
-          onTap: () => _showComingSoon(context, AppStrings.termsConditions),
+          onTap: () => context.push(AppRouter.termsConditionsPath),
         ),
         _MenuItem(
           icon: Icons.shield_outlined,
           label: AppStrings.privacyPolicy,
-          onTap: () => _showComingSoon(context, AppStrings.privacyPolicy),
+          onTap: () => context.push(AppRouter.privacyPolicyPath),
         ),
       ],
     );
