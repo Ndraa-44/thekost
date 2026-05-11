@@ -13,6 +13,7 @@ import '../features/profile/presentation/pages/edit_profile_page.dart';
 import '../features/profile/presentation/pages/privacy_policy_page.dart';
 import '../features/profile/presentation/pages/help_center_page.dart';
 import '../features/profile/presentation/pages/terms_conditions_page.dart';
+import '../features/booking/presentation/pages/create_booking_page.dart';
 
 class AppRouter {
   AppRouter._(); // Prevent instantiation
@@ -24,6 +25,7 @@ class AppRouter {
   static const String registerPath = '/register';
   static const String propertyDetailPath = '/property-detail';
   static const String searchResultPath = '/search-result';
+  static const String createBookingPath = '/create-booking';
 
   // ── Profile Detail Paths ──
   static const String verifyAccountPath = '/verify-account';
@@ -67,6 +69,13 @@ class AppRouter {
             location: params['location']!,
             category: params['category']!,
           );
+        },
+      ),
+      GoRoute(
+        path: createBookingPath,
+        builder: (context, state) {
+          final property = state.extra as Property;
+          return CreateBookingPage(property: property);
         },
       ),
 

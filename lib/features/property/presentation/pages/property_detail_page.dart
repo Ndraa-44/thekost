@@ -626,7 +626,7 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
           const SizedBox(height: AppSpacing.sm),
           // Google Maps Placeholder
           Container(
-            height: 150,
+            height: 180,
             width: double.infinity,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
@@ -710,9 +710,7 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
   void _handleBooking(BuildContext context) {
     final authState = context.read<AuthBloc>().state;
     if (authState is AuthAuthenticated) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text(AppStrings.bookingContinue)),
-      );
+      context.push(AppRouter.createBookingPath, extra: property);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text(AppStrings.loginRequired)),

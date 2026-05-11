@@ -75,7 +75,7 @@ class _MainScreenState extends State<MainScreen> {
               BottomNavigationBarItem(
                 icon: Padding(
                   padding: EdgeInsets.only(bottom: 4.0),
-                  child: Icon(Icons.chat_bubble_outline),
+                  child: Icon(Icons.forum_outlined),
                 ),
                 label: AppStrings.navChat,
               ),
