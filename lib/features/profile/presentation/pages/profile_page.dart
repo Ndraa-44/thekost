@@ -164,7 +164,7 @@ class _ProfileContent extends StatelessWidget {
           icon: Icons.person_add_alt_1,
           label: AppStrings.startRenting,
           subtitle: AppStrings.startRentingSub,
-          onTap: () => _showComingSoon(context, AppStrings.startRenting),
+          onTap: () => context.push(AppRouter.sellerLoginPath),
         ),
         _MenuItem(
           icon: Icons.receipt_long,

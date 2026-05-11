@@ -14,6 +14,11 @@ import '../features/profile/presentation/pages/privacy_policy_page.dart';
 import '../features/profile/presentation/pages/help_center_page.dart';
 import '../features/profile/presentation/pages/terms_conditions_page.dart';
 import '../features/booking/presentation/pages/create_booking_page.dart';
+import '../features/seller/presentation/pages/seller_login_page.dart';
+import '../features/seller/presentation/pages/seller_register_page.dart';
+import '../features/seller/presentation/pages/seller_whatsapp_verify_page.dart';
+import '../features/seller/presentation/pages/seller_identity_page.dart';
+import '../features/seller/presentation/pages/seller_verification_success_page.dart';
 
 class AppRouter {
   AppRouter._(); // Prevent instantiation
@@ -26,6 +31,13 @@ class AppRouter {
   static const String propertyDetailPath = '/property-detail';
   static const String searchResultPath = '/search-result';
   static const String createBookingPath = '/create-booking';
+
+  // ── Seller Paths ──
+  static const String sellerLoginPath = '/seller-login';
+  static const String sellerRegisterPath = '/seller-register';
+  static const String sellerVerifyWaPath = '/seller-verify-wa';
+  static const String sellerIdentityPath = '/seller-identity';
+  static const String sellerSuccessPath = '/seller-success';
 
   // ── Profile Detail Paths ──
   static const String verifyAccountPath = '/verify-account';
@@ -77,6 +89,28 @@ class AppRouter {
           final property = state.extra as Property;
           return CreateBookingPage(property: property);
         },
+      ),
+
+      // ── Seller Routes ──
+      GoRoute(
+        path: sellerLoginPath,
+        builder: (context, state) => const SellerLoginPage(),
+      ),
+      GoRoute(
+        path: sellerRegisterPath,
+        builder: (context, state) => const SellerRegisterPage(),
+      ),
+      GoRoute(
+        path: sellerVerifyWaPath,
+        builder: (context, state) => const SellerWhatsappVerifyPage(),
+      ),
+      GoRoute(
+        path: sellerIdentityPath,
+        builder: (context, state) => const SellerIdentityPage(),
+      ),
+      GoRoute(
+        path: sellerSuccessPath,
+        builder: (context, state) => const SellerVerificationSuccessPage(),
       ),
 
       // ── Profile Detail Routes ──

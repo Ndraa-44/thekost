@@ -514,7 +514,7 @@ class _CreateBookingViewState extends State<_CreateBookingView> {
                   ),
                 ),
                 Icon(
-                  Icons.calendar_today_outlined,
+                  Icons.calendar_month_outlined,
                   color: isReadOnly ? Colors.grey : AppColors.primary,
                   size: 18,
                 ),

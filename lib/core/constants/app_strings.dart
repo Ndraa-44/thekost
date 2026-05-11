@@ -116,6 +116,84 @@ class AppStrings {
   static const String noLocationFound = 'Tidak ada lokasi ditemukan';
   static const String selectLocationFirst = 'Pilih lokasi terlebih dahulu';
 
+  // ── Seller Auth ──
+  static const String sellerLoginTitle =
+      'Masuk untuk mulai menyewakan properti anda';
+  static const String sellerLoginSubtitle =
+      'Daftarkan akun seller dan kelola properti Anda dengan mudah di TheKost.';
+  static const String sellerLoginButton = 'Masuk sebagai Seller';
+  static const String sellerNoAccount = 'Belum punya akun? ';
+  static const String sellerRegisterLink = 'Daftar';
+  static const String sellerRegisterTitle =
+      'Masuk untuk mulai menyewakan properti anda';
+  static const String sellerRegisterSubtitle =
+      'Daftarkan akun seller dan kelola properti Anda dengan mudah di TheKost.';
+  static const String sellerWhatsappLabel = 'No. Whatsapp';
+  static const String sellerWhatsappHint = 'Masukkan nomor whatsapp aktif';
+  static const String sellerWhatsappNote =
+      'Nomor Whatsapp digunakan untuk verifikasi akun & komunikasi pembeli.';
+  static const String sellerPasswordHint = 'Buat password akun';
+  static const String sellerPasswordNote =
+      'Minimal 8 karakter dengan kombinasi huruf dan angka.';
+  static const String sellerConfirmPasswordLabel = 'Konfirmasi Password';
+  static const String sellerConfirmPasswordHint =
+      'Masukkan ulang password anda';
+  static const String sellerContinueButton = 'Lanjutkan';
+  static const String sellerHasAccount = 'Sudah punya akun? ';
+  static const String sellerLoginLink = 'Masuk';
+  static const String sellerAgreePrefix = 'Dengan mendaftar, Anda menyetujui ';
+  static const String sellerTermsLink = 'Syarat & Ketentuan';
+  static const String sellerAndText = ' serta ';
+  static const String sellerPrivacyLink = 'Kebijakan Privasi';
+  static const String sellerAgreeTheKost = ' TheKost.';
+
+  // ── Seller WhatsApp Verification ──
+  static const String sellerWaVerifyTitle = 'Verifikasi Nomor WhatsApp';
+  static const String sellerWaVerifySubtitle =
+      'Kami telah mengirim kode OTP ke nomor WhatsApp anda. Silahkan Masukan kode tersebut dibawah.';
+  static const String sellerWaVerifyButton = 'Verifikasi Sekarang';
+  static const String sellerWaNotReceived = 'Tidak menerima kode?';
+  static const String sellerWaResend = 'Kirim ulang kode';
+
+  // ── Seller Identity ──
+  static const String sellerIdentityTitle = 'Lengkapi Identitas Seller';
+  static const String sellerIdentitySubtitle =
+      'Unggah identitas dan rekening untuk keamanan transaksi.';
+  static const String sellerStepIdentity = 'Identitas';
+  static const String sellerStepWaiting = 'Menunggu verifikasi';
+  static const String sellerDataKtp = 'Data KTP';
+  static const String sellerUploadKtp = 'Upload Foto KTP';
+  static const String sellerUploadKtpFormat = 'Format: JPG, PNG, max 5MB';
+  static const String sellerNamaKtp = 'Nama Sesuai KTP';
+  static const String sellerNamaKtpHint = 'Contoh: Ahmad Santoso';
+  static const String sellerNik = 'NIK';
+  static const String sellerNikHint = '16 digit nomor induk kependudukan';
+  static const String sellerRekeningTitle = 'Rekening Bank';
+  static const String sellerNamaBank = 'Nama Bank';
+  static const String sellerNamaBankHint = 'Contoh: BCA';
+  static const String sellerNoRekening = 'Nomor Rekening';
+  static const String sellerNoRekeningHint = 'Masukkan nomor rekening';
+  static const String sellerNamaPemilik = 'Nama Pemilik Rekening';
+  static const String sellerNamaPemilikHint =
+      'Masukkan nama sesuai buku tabungan';
+  static const String sellerAgreeIdentity =
+      'Saya telah membaca, memahami, dan menyetujui ';
+  static const String sellerIdentityTerms = 'Syarat & Ketentuan';
+  static const String sellerIdentityForText = ' untuk pendaftaran seller dan ';
+  static const String sellerIdentityPrivacy = 'kebijakan privasi';
+  static const String sellerIdentityEnding = ' yang berlaku.';
+  static const String sellerRegisterButton = 'Daftar Sebagai Seller';
+
+  // ── Seller Verification Success ──
+  static const String sellerSuccessTitle = 'Pengajuan Seller Berhasil';
+  static const String sellerSuccessSubtitle =
+      'Data Anda sedang ditinjau oleh tim TheKost. Setelah disetujui, Anda dapat mulai mengelola dan mempublikasikan property.';
+  static const String sellerSuccessEstimation = 'Estimasi Waktu';
+  static const String sellerSuccessEstimationValue =
+      'Estimasi waktu verifikasi maksimal 1 x 24 jam';
+  static const String sellerBackToDashboard = 'Kembali ke Dashboard';
+  static const String sellerCheckStatus = 'Lihat Status Pengajuan';
+
   // ── Navigation ──
   static const String navDiscover = 'Discover';
   static const String navBookings = 'Bookings';
