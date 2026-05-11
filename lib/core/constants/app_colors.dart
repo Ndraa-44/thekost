@@ -15,6 +15,7 @@ class AppColors {
 
   // ── Backgrounds ──
   static const Color background = Color(0xFFF8FAFC);
+  static const Color navBarBackground = Color(0xFFE7ECF3);
   static const Color white = Colors.white;
   static const Color cardBackground = Colors.white;
 

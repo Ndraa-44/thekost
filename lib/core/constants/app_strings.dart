@@ -119,6 +119,7 @@ class AppStrings {
   // ── Navigation ──
   static const String navDiscover = 'Discover';
   static const String navBookings = 'Bookings';
-  static const String navFavorites = 'Favorit';
+  static const String navChat = 'Chat';
+  static const String navSaved = 'Saved';
   static const String navProfile = 'Profile';
 }

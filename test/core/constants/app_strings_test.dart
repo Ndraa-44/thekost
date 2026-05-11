@@ -70,8 +70,12 @@ void main() {
         expect(AppStrings.navBookings, isNotEmpty);
       });
 
-      test('navFavorites should be non-empty', () {
-        expect(AppStrings.navFavorites, isNotEmpty);
+      test('navChat should be non-empty', () {
+        expect(AppStrings.navChat, isNotEmpty);
+      });
+
+      test('navSaved should be non-empty', () {
+        expect(AppStrings.navSaved, isNotEmpty);
       });
 
       test('navProfile should be non-empty', () {
