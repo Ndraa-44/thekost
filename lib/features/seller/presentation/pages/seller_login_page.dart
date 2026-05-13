@@ -1,4 +1,4 @@
-import 'package:flutter/gestures.dart';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../app/router.dart';
@@ -18,7 +18,7 @@ class _SellerLoginPageState extends State<SellerLoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
-  bool _agreeTerms = false;
+
 
   @override
   void dispose() {

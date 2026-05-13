@@ -672,7 +672,7 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text(
-              'Bookings',
+              'Saved',
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,

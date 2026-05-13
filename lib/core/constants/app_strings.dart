@@ -60,6 +60,7 @@ class AppStrings {
   static const String myBookings = 'Pesanan Saya';
   static const String bookingActive = 'Aktif';
   static const String bookingCompleted = 'Selesai';
+  static const String bookingRefund = 'Diproses';
   static const String bookingCancelled = 'Dibatalkan';
   static const String viewDetail = 'Lihat Detail';
   static const String total = 'Total';
@@ -67,7 +68,31 @@ class AppStrings {
   static const String checkOut = 'Check-out';
   static const String noActiveBooking = 'Belum ada pesanan aktif.';
   static const String noCompletedBooking = 'Belum ada pesanan selesai.';
+  static const String noRefundBooking = 'Belum ada pesanan refund.';
   static const String noCancelledBooking = 'Tidak ada pesanan yang dibatalkan.';
+
+  // ── Booking Detail (Riwayat Transaksi) ──
+  static const String transactionHistory = 'Riwayat Transaksi';
+  static const String transactionDetail = 'Detail Transaksi';
+  static const String transactionDate = 'Tanggal Transaksi';
+  static const String checkInDate = 'Tanggal Check-in';
+  static const String durationLabel = 'Durasi';
+  static const String roomCountLabel = 'Jumlah Kamar';
+  static const String paymentDetail = 'Detail Pembayaran';
+  static const String rentPerMonth = 'Harga Sewa / Bulan';
+  static const String motorBikePackage = 'Paket Sewa Motor';
+  static const String serviceFeeLabel = 'Biaya Layanan';
+  static const String totalPaymentLabel = 'Total Pembayaran';
+  static const String transactionStatus = 'Status Transaksi';
+  static const String transactionSuccessMsg =
+      'Transaksi berhasil. Pemesanan Anda telah dikonfirmasi. Silakan datang sesuai tanggal yang dijadwalkan dan bawa identitas untuk verifikasi.';
+  static const String refundTitle = 'Ajukan Refund';
+  static const String refundDescription =
+      'Ajukan pengembalian dana jika terjadi pembatalan atau kendala pada transaksi Anda. Permintaan refund akan diproses sesuai kebijakan yang berlaku.';
+  static const String refundCountdownLabel = 'Batas waktu pengajuan refund:';
+  static const String refundExpired = 'Batas Waktu Refund Habis';
+  static const String refundExpiredDesc =
+      'Waktu pengajuan refund untuk transaksi ini sudah berakhir.';
 
   // ── Saved / Favorites ──
   static const String favorites = 'Favorit';
@@ -196,7 +221,7 @@ class AppStrings {
 
   // ── Navigation ──
   static const String navDiscover = 'Discover';
-  static const String navBookings = 'Bookings';
+  static const String navBookings = 'Orders';
   static const String navChat = 'Chat';
   static const String navSaved = 'Saved';
   static const String navProfile = 'Profile';

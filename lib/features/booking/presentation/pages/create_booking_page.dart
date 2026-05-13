@@ -699,55 +699,56 @@ class _CreateBookingViewState extends State<_CreateBookingView> {
                 elevation: 8,
                 clipBehavior: Clip.antiAlias,
                 itemBuilder: (BuildContext context) {
-              return items.map((String item) {
-                final isSelected = item == value;
-                return PopupMenuItem<String>(
-                  value: item,
-                  padding: EdgeInsets.zero,
-                  height: 48,
-                  child: Container(
-                    width: double.infinity,
-                    height: 48,
-                    alignment: Alignment.centerLeft,
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    decoration: BoxDecoration(
-                      color: isSelected
-                          ? AppColors.primary
-                          : Colors.transparent,
-                    ),
-                    child: Text(
-                      item,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: isSelected ? Colors.white : Colors.black87,
-                        fontWeight: isSelected
-                            ? FontWeight.bold
-                            : FontWeight.normal,
+                  return items.map((String item) {
+                    final isSelected = item == value;
+                    return PopupMenuItem<String>(
+                      value: item,
+                      padding: EdgeInsets.zero,
+                      height: 48,
+                      child: Container(
+                        width: double.infinity,
+                        height: 48,
+                        alignment: Alignment.centerLeft,
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        decoration: BoxDecoration(
+                          color: isSelected
+                              ? AppColors.primary
+                              : Colors.transparent,
+                        ),
+                        child: Text(
+                          item,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: isSelected ? Colors.white : Colors.black87,
+                            fontWeight: isSelected
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                          ),
+                        ),
                       ),
-                    ),
+                    );
+                  }).toList();
+                },
+                child: Container(
+                  height: 46,
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+                    border: Border.all(color: Colors.grey.shade300),
+                    color: Colors.white,
                   ),
-                );
-              }).toList();
-            },
-            child: Container(
-              height: 46,
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
-                border: Border.all(color: Colors.grey.shade300),
-                color: Colors.white,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(value, style: const TextStyle(fontSize: 14)),
+                      const Icon(Icons.keyboard_arrow_down, color: Colors.grey),
+                    ],
+                  ),
+                ),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(value, style: const TextStyle(fontSize: 14)),
-                  const Icon(Icons.keyboard_arrow_down, color: Colors.grey),
-                ],
-              ),
-              ),
-            ),
-          );
-        }),
+            );
+          },
+        ),
       ],
     );
   }

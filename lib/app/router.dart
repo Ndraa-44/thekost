@@ -14,6 +14,8 @@ import '../features/profile/presentation/pages/privacy_policy_page.dart';
 import '../features/profile/presentation/pages/help_center_page.dart';
 import '../features/profile/presentation/pages/terms_conditions_page.dart';
 import '../features/booking/presentation/pages/create_booking_page.dart';
+import '../features/booking/presentation/pages/booking_detail_page.dart';
+import '../features/booking/domain/entities/booking.dart' as booking_entity;
 import '../features/seller/presentation/pages/seller_login_page.dart';
 import '../features/seller/presentation/pages/seller_register_page.dart';
 import '../features/seller/presentation/pages/seller_whatsapp_verify_page.dart';
@@ -31,6 +33,7 @@ class AppRouter {
   static const String propertyDetailPath = '/property-detail';
   static const String searchResultPath = '/search-result';
   static const String createBookingPath = '/create-booking';
+  static const String bookingDetailPath = '/booking-detail';
 
   // ── Seller Paths ──
   static const String sellerLoginPath = '/seller-login';
@@ -88,6 +91,14 @@ class AppRouter {
         builder: (context, state) {
           final property = state.extra as Property;
           return CreateBookingPage(property: property);
+        },
+      ),
+
+      GoRoute(
+        path: bookingDetailPath,
+        builder: (context, state) {
+          final booking = state.extra as booking_entity.Booking;
+          return BookingDetailPage(booking: booking);
         },
       ),
 

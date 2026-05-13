@@ -38,37 +38,162 @@ class BookingPage extends StatelessWidget {
 }
 
 // ─────────────── SUDAH LOGIN ───────────────
-class _BookingContent extends StatelessWidget {
+class _BookingContent extends StatefulWidget {
   const _BookingContent();
 
   @override
+  State<_BookingContent> createState() => _BookingContentState();
+}
+
+class _BookingContentState extends State<_BookingContent>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+  int _visualIndex = 0;
+
+  static const _tabs = [
+    BookingStatus.active,
+    BookingStatus.completed,
+    BookingStatus.refund,
+    BookingStatus.cancelled,
+  ];
+
+  static const _tabLabels = [
+    AppStrings.bookingActive,
+    AppStrings.bookingCompleted,
+    AppStrings.bookingRefund,
+    AppStrings.bookingCancelled,
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: _tabs.length, vsync: this);
+    // Primary: definitive index changes (reliable for both tap & swipe completion)
+    _tabController.addListener(_onTabIndexChanged);
+    // Secondary: smooth real-time visual tracking during swipe gestures
+    _tabController.animation?.addListener(_onTabAnimation);
+  }
+
+  void _onTabIndexChanged() {
+    // Fires when tab index definitively changes after tap or swipe completion
+    final idx = _tabController.index;
+    if (idx != _visualIndex) {
+      setState(() => _visualIndex = idx);
+    }
+  }
+
+  void _onTabAnimation() {
+    // Real-time tracking during active swipe gestures
+    final value = _tabController.animation?.value;
+    if (value != null) {
+      final newIndex = value.round();
+      if (newIndex != _visualIndex) {
+        setState(() => _visualIndex = newIndex);
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _tabController.removeListener(_onTabIndexChanged);
+    _tabController.animation?.removeListener(_onTabAnimation);
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        backgroundColor: AppColors.background,
-        appBar: AppBar(
-          title: const Text(AppStrings.myBookings),
-          bottom: const TabBar(
-            indicatorColor: Colors.white,
-            indicatorWeight: 3,
-            labelColor: Colors.white,
-            unselectedLabelColor: Colors.white60,
-            labelStyle: TextStyle(fontWeight: FontWeight.w600),
-            tabs: [
-              Tab(text: AppStrings.bookingActive),
-              Tab(text: AppStrings.bookingCompleted),
-              Tab(text: AppStrings.bookingCancelled),
-            ],
+    return Scaffold(
+      backgroundColor: AppColors.background,
+      appBar: AppBar(
+        title: const Text(AppStrings.myBookings),
+        centerTitle: false,
+      ),
+      body: Column(
+        children: [
+          // ── Smooth Sliding Tab Bar ──
+          Container(
+            margin: const EdgeInsets.fromLTRB(
+                AppSpacing.md, AppSpacing.md, AppSpacing.md, AppSpacing.sm),
+            padding: const EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade200,
+              borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
+            ),
+            child: AnimatedBuilder(
+              animation: _tabController.animation!,
+              builder: (context, _) {
+                final animValue = _tabController.animation!.value;
+                return LayoutBuilder(
+                  builder: (context, constraints) {
+                    final tabWidth = constraints.maxWidth / _tabs.length;
+                    return Stack(
+                      children: [
+                        // ── Sliding pill indicator ──
+                        Positioned(
+                          left: animValue * tabWidth,
+                          width: tabWidth,
+                          top: 0,
+                          bottom: 0,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: AppColors.primary,
+                              borderRadius: BorderRadius.circular(
+                                  AppSpacing.radiusSm + 2),
+                            ),
+                          ),
+                        ),
+                        // ── Tab labels ──
+                        Row(
+                          children: List.generate(_tabs.length, (i) {
+                            final distance = (animValue - i).abs();
+                            final selectedness =
+                                (1.0 - distance).clamp(0.0, 1.0);
+                            return Expanded(
+                              child: GestureDetector(
+                                onTap: () => _tabController.animateTo(i),
+                                behavior: HitTestBehavior.opaque,
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 10),
+                                  child: Center(
+                                    child: Text(
+                                      _tabLabels[i],
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: selectedness > 0.5
+                                            ? FontWeight.w700
+                                            : FontWeight.w500,
+                                        color: Color.lerp(
+                                          Colors.grey.shade600,
+                                          Colors.white,
+                                          selectedness,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+            ),
           ),
-        ),
-        body: const TabBarView(
-          children: [
-            _BookingListView(status: BookingStatus.active),
-            _BookingListView(status: BookingStatus.completed),
-            _BookingListView(status: BookingStatus.cancelled),
-          ],
-        ),
+          // ── Tab Content ──
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: _tabs
+                  .map((status) => _BookingListView(status: status))
+                  .toList(),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -88,7 +213,7 @@ class _BookingListView extends StatelessWidget {
     if (bookings.isEmpty) return _buildEmpty();
 
     return ListView.builder(
-      padding: const EdgeInsets.all(AppSpacing.xl - 4),
+      padding: const EdgeInsets.all(AppSpacing.md),
       itemCount: bookings.length,
       itemBuilder: (_, i) => _BookingCard(booking: bookings[i]),
     );
@@ -98,11 +223,13 @@ class _BookingListView extends StatelessWidget {
     final messages = {
       BookingStatus.active: AppStrings.noActiveBooking,
       BookingStatus.completed: AppStrings.noCompletedBooking,
+      BookingStatus.refund: AppStrings.noRefundBooking,
       BookingStatus.cancelled: AppStrings.noCancelledBooking,
     };
     final icons = {
       BookingStatus.active: Icons.hourglass_empty_rounded,
       BookingStatus.completed: Icons.check_circle_outline_rounded,
+      BookingStatus.refund: Icons.replay_rounded,
       BookingStatus.cancelled: Icons.cancel_outlined,
     };
 
@@ -144,112 +271,130 @@ class _BookingCard extends StatelessWidget {
         ],
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Image + Badge
+          // ── Image ──
           ClipRRect(
             borderRadius: const BorderRadius.vertical(
               top: Radius.circular(AppSpacing.radiusLg),
             ),
-            child: Stack(
-              children: [
-                Image.network(
-                  booking.propertyImage,
-                  height: 140,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-                Positioned(
-                  top: 12,
-                  right: 12,
-                  child: _buildStatusBadge(),
-                ),
-              ],
+            child: Image.network(
+              booking.propertyImage,
+              height: 160,
+              width: double.infinity,
+              fit: BoxFit.cover,
+              errorBuilder: (_, __, ___) => Container(
+                height: 160,
+                color: Colors.grey.shade200,
+                child: const Center(child: Icon(Icons.broken_image, size: 48)),
+              ),
             ),
           ),
-          // Info
+
+          // ── Info Section ──
           Padding(
             padding: const EdgeInsets.all(AppSpacing.md),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Type label + badge
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _PropertyTypeLabel(type: booking.propertyType),
+                    _StatusBadge(status: booking.status),
+                  ],
+                ),
+                const SizedBox(height: AppSpacing.sm),
+
+                // Name
                 Text(
                   booking.propertyName,
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary,
                   ),
                 ),
-                const SizedBox(height: 6),
+                const SizedBox(height: 4),
+
+                // Location
                 Row(
                   children: [
-                    Icon(Icons.location_on_outlined,
+                    Icon(Icons.location_on,
                         size: 14, color: Colors.grey.shade500),
                     const SizedBox(width: 4),
+                    Expanded(
+                      child: Text(
+                        booking.location,
+                        style: TextStyle(
+                          color: Colors.grey.shade500,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: AppSpacing.md),
+
+                // Dates + Duration row
+                Row(
+                  children: [
+                    Icon(Icons.calendar_today_rounded,
+                        size: 14, color: Colors.grey.shade600),
+                    const SizedBox(width: 6),
                     Text(
-                      booking.location,
+                      '${booking.checkIn} • ${booking.duration.isNotEmpty ? booking.duration : booking.checkOut}',
                       style: TextStyle(
-                        color: Colors.grey.shade500,
                         fontSize: 13,
+                        color: Colors.grey.shade600,
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: AppSpacing.md - 4),
-                // Dates row
-                Row(
-                  children: [
-                    _buildDateChip(
-                      Icons.login_rounded,
-                      AppStrings.checkIn,
-                      booking.checkIn,
-                    ),
-                    const SizedBox(width: AppSpacing.md - 4),
-                    _buildDateChip(
-                      Icons.logout_rounded,
-                      AppStrings.checkOut,
-                      booking.checkOut,
-                    ),
-                  ],
+
+                const SizedBox(height: AppSpacing.md),
+
+                // Price
+                Text(
+                  booking.price,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                    color: AppColors.primary,
+                  ),
                 ),
-                const Divider(height: AppSpacing.lg),
-                // Price + Action
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          AppStrings.total,
-                          style: TextStyle(
-                            color: Colors.grey.shade500,
-                            fontSize: 12,
-                          ),
-                        ),
-                        Text(
-                          booking.price,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                            color: AppColors.primary,
-                          ),
-                        ),
-                      ],
-                    ),
-                    if (booking.status == BookingStatus.active)
-                      OutlinedButton(
-                        onPressed: () {},
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: AppColors.primary,
-                          side: const BorderSide(color: AppColors.primary),
-                          shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(AppSpacing.radiusSm + 2),
-                          ),
-                        ),
-                        child: const Text(AppStrings.viewDetail),
+
+                const SizedBox(height: AppSpacing.md),
+
+                // View Detail Button
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      context.push(
+                        AppRouter.bookingDetailPath,
+                        extra: booking,
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(AppSpacing.radiusMd),
                       ),
-                  ],
+                      elevation: 0,
+                    ),
+                    child: const Text(
+                      AppStrings.viewDetail,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -258,29 +403,66 @@ class _BookingCard extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildStatusBadge() {
+// ── Property Type Label ──
+class _PropertyTypeLabel extends StatelessWidget {
+  final String type;
+  const _PropertyTypeLabel({required this.type});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade100,
+        borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+      ),
+      child: Text(
+        type,
+        style: TextStyle(
+          fontSize: 11,
+          fontWeight: FontWeight.w700,
+          color: Colors.grey.shade700,
+          letterSpacing: 0.5,
+        ),
+      ),
+    );
+  }
+}
+
+// ── Status Badge ──
+class _StatusBadge extends StatelessWidget {
+  final BookingStatus status;
+  const _StatusBadge({required this.status});
+
+  @override
+  Widget build(BuildContext context) {
     final Color bgColor;
     final Color textColor;
     final String label;
 
-    switch (booking.status) {
+    switch (status) {
       case BookingStatus.active:
-        bgColor = Colors.green.shade50;
-        textColor = Colors.green.shade700;
+        bgColor = AppColors.primary;
+        textColor = Colors.white;
         label = AppStrings.bookingActive;
       case BookingStatus.completed:
-        bgColor = Colors.blue.shade50;
-        textColor = Colors.blue.shade700;
+        bgColor = const Color(0xFF16A34A);
+        textColor = Colors.white;
         label = AppStrings.bookingCompleted;
+      case BookingStatus.refund:
+        bgColor = const Color(0xFFF59E0B);
+        textColor = Colors.white;
+        label = AppStrings.bookingRefund;
       case BookingStatus.cancelled:
-        bgColor = Colors.red.shade50;
-        textColor = Colors.red.shade700;
+        bgColor = const Color(0xFFDC2626);
+        textColor = Colors.white;
         label = AppStrings.bookingCancelled;
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
@@ -291,40 +473,6 @@ class _BookingCard extends StatelessWidget {
           color: textColor,
           fontSize: 11,
           fontWeight: FontWeight.w600,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDateChip(IconData icon, String label, String date) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: Colors.grey.shade50,
-          borderRadius: BorderRadius.circular(AppSpacing.radiusSm + 2),
-        ),
-        child: Row(
-          children: [
-            Icon(icon, size: 16, color: AppColors.primary),
-            const SizedBox(width: AppSpacing.sm),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: TextStyle(color: Colors.grey.shade500, fontSize: 10),
-                ),
-                Text(
-                  date,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-          ],
         ),
       ),
     );

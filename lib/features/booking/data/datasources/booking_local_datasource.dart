@@ -5,18 +5,28 @@ import '../../domain/entities/booking.dart';
 /// Will be replaced by a Supabase data source in the future.
 class BookingLocalDataSource {
   /// Mock booking records.
-  static const List<Booking> bookings = [
+  static final List<Booking> bookings = [
     // ── Aktif ──
     Booking(
       id: 'B001',
-      propertyName: "D'Kost Exclusive Jakal",
+      propertyName: 'Kost Melati Putri',
       propertyImage:
           'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=500',
-      location: 'Sleman',
-      checkIn: '24 Apr 2026',
-      checkOut: '24 Mei 2026',
-      price: 'Rp 1.200.000',
+      location: 'Sleman, Yogyakarta',
+      checkIn: '20 Apr 2026',
+      checkOut: '20 Mei 2026',
+      price: 'Rp 1.500.000',
       status: BookingStatus.active,
+      propertyType: 'KOST',
+      transactionDate: '20 April 2026',
+      duration: '1 Bulan',
+      roomCount: 1,
+      rentPrice: 'Rp 1.000.000',
+      motorBikePrice: 'Rp 100.000',
+      serviceFee: '10.000',
+      totalPayment: 'Rp 1.110.000',
+      tenantArrivalConfirmedAt:
+          DateTime.now().subtract(const Duration(hours: 2)),
     ),
     Booking(
       id: 'B002',
@@ -28,18 +38,35 @@ class BookingLocalDataSource {
       checkOut: '27 Apr 2026',
       price: 'Rp 700.000',
       status: BookingStatus.active,
+      propertyType: 'HOMESTAY',
+      transactionDate: '25 April 2026',
+      duration: '3 Hari',
+      roomCount: 1,
+      rentPrice: 'Rp 650.000',
+      serviceFee: '10.000',
+      totalPayment: 'Rp 660.000',
     ),
     // ── Selesai ──
     Booking(
       id: 'B003',
-      propertyName: 'Villa Kaliurang Retreat',
+      propertyName: 'Kost Melati Putri',
       propertyImage:
           'https://images.unsplash.com/photo-1570129477492-45a003537e1f?q=80&w=500',
-      location: 'Sleman',
-      checkIn: '10 Mar 2026',
-      checkOut: '12 Mar 2026',
-      price: 'Rp 1.700.000',
+      location: 'Sleman, Yogyakarta',
+      checkIn: '20 Apr 2026',
+      checkOut: '20 Mei 2026',
+      price: 'Rp 1.500.000',
       status: BookingStatus.completed,
+      propertyType: 'KOST',
+      transactionDate: '20 April 2026',
+      duration: '1 Bulan',
+      roomCount: 1,
+      rentPrice: 'Rp 1.000.000',
+      motorBikePrice: 'Rp 100.000',
+      serviceFee: '10.000',
+      totalPayment: 'Rp 1.110.000',
+      tenantArrivalConfirmedAt:
+          DateTime.now().subtract(const Duration(hours: 2)),
     ),
     Booking(
       id: 'B004',
@@ -51,6 +78,35 @@ class BookingLocalDataSource {
       checkOut: '01 Mar 2026',
       price: 'Rp 1.500.000',
       status: BookingStatus.completed,
+      propertyType: 'KOST',
+      transactionDate: '01 Februari 2026',
+      duration: '1 Bulan',
+      roomCount: 1,
+      rentPrice: 'Rp 1.400.000',
+      serviceFee: '10.000',
+      totalPayment: 'Rp 1.410.000',
+      // Arrival confirmed > 4 hours ago — refund disabled
+      tenantArrivalConfirmedAt:
+          DateTime.now().subtract(const Duration(hours: 5)),
+    ),
+    // ── Refund ──
+    Booking(
+      id: 'B006',
+      propertyName: 'Villa Kaliurang Retreat',
+      propertyImage:
+          'https://images.unsplash.com/photo-1570129477492-45a003537e1f?q=80&w=500',
+      location: 'Sleman, Yogyakarta',
+      checkIn: '10 Mar 2026',
+      checkOut: '12 Mar 2026',
+      price: 'Rp 1.700.000',
+      status: BookingStatus.refund,
+      propertyType: 'VILLA',
+      transactionDate: '10 Maret 2026',
+      duration: '3 Hari',
+      roomCount: 1,
+      rentPrice: 'Rp 1.650.000',
+      serviceFee: '10.000',
+      totalPayment: 'Rp 1.660.000',
     ),
     // ── Dibatalkan ──
     Booking(
@@ -63,6 +119,13 @@ class BookingLocalDataSource {
       checkOut: '17 Jan 2026',
       price: 'Rp 2.200.000',
       status: BookingStatus.cancelled,
+      propertyType: 'VILLA',
+      transactionDate: '15 Januari 2026',
+      duration: '3 Hari',
+      roomCount: 1,
+      rentPrice: 'Rp 2.100.000',
+      serviceFee: '10.000',
+      totalPayment: 'Rp 2.110.000',
     ),
   ];
 }
